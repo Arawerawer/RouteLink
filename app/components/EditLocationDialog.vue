@@ -139,7 +139,7 @@ const update = () => {
           <div class="w-full flex justify-center items-center gap-3">
             <button
               :disabled="isDeleting"
-              class="w-full px-6 py-3 bg-white/10 rounded-2xl outline-1 outline-offset-1 outline-white/20 flex justify-center items-center cursor-pointer hover:bg-white/20 disabled:opacity-50 text-center text-red-300 text-base font-medium font-['Noto_Sans_TC'] leading-6"
+              class="w-full h-12 bg-white/10 rounded-2xl outline-1 outline-offset-1 outline-white/20 flex justify-center items-center cursor-pointer hover:bg-white/20 disabled:opacity-50 text-center text-red-300 text-base font-medium font-['Noto_Sans_TC'] leading-6"
               @click="remove"
             >
               <Icon
@@ -152,7 +152,7 @@ const update = () => {
 
             <button
               :disabled="isUpdating"
-              class="w-full px-6 py-3 bg-white/10 rounded-2xl outline-1 outline-offset-1 outline-white/20 flex justify-center items-center cursor-pointer hover:bg-white/20 disabled:opacity-50 text-center text-white text-base font-medium font-['Noto_Sans_TC'] leading-6"
+              class="w-full h-12 bg-white/10 rounded-2xl outline-1 outline-offset-1 outline-white/20 flex justify-center items-center cursor-pointer hover:bg-white/20 disabled:opacity-50 text-center text-white text-base font-medium font-['Noto_Sans_TC'] leading-6"
               @click="update"
             >
               <Icon
