@@ -35,6 +35,9 @@ export default defineNuxtConfig({
       enabled: false,
     },
     registerType: "autoUpdate",
+    workbox: {
+      navigateFallback: null,
+    },
     manifest: {
       name: "RouteLink",
       short_name: "RouteLink",
