@@ -8,6 +8,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      title: "RouteLink",
       link: [
         { rel: "icon", type: "image/png", href: "/pwa-192x192.png" },
         { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
@@ -41,6 +42,7 @@ export default defineNuxtConfig({
       theme_color: "#1e3a5f",
       background_color: "#1e3a5f",
       display: "standalone",
+      start_url: "/",
       orientation: "portrait",
       icons: [
         {
@@ -60,9 +62,6 @@ export default defineNuxtConfig({
           purpose: "maskable",
         },
       ],
-    },
-    workbox: {
-      globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
     },
   },
 });
