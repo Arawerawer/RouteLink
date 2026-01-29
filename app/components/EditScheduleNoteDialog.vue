@@ -82,7 +82,7 @@ const close = () => {
         </div>
 
         <div
-          class="w-full justify-start text-white/80 text-lg font-normal font-['Noto_Sans_TC'] leading-7"
+          class="w-full justify-start text-white/80 text-lg font-normal font-['Noto_Sans_TC'] leading-7 max-w-full break-all"
         >
           {{ model.name }}
         </div>

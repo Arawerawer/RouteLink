@@ -6,7 +6,7 @@ const auth = useAuthStore();
 
 <template>
   <div
-    class="w-full p-6 fixed left-0 top-0 z-10 flex flex-col justify-center items-center"
+    class="w-full p-6 absolute left-0 top-0 z-10 flex flex-col justify-center items-center"
   >
     <div
       class="w-full px-6 py-4 bg-white/10 rounded-[20px] shadow-lg outline-1 -outline-offset-1 outline-white/20 flex flex-col justify-center items-center"

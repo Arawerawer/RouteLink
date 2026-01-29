@@ -23,41 +23,32 @@ const { data: locations } = useLocationsQuery();
 const { data: schedules } = useSchedulesQuery();
 
 // 加入行程 mutation
-const {
-  mutate: addToSchedule,
-  isPending: isAdding,
-  variables: addingLocationId,
-} = useAddSchedule();
+const addSchedule = useAddSchedule();
 
 // 判斷某個地點是否正在加入中
 const isAddingLocation = (id: string) => {
-  if (isAdding.value && addingLocationId.value === id) {
+  if (addSchedule.isPending.value && addSchedule.variables.value === id) {
     return true;
   }
   return false;
 };
 
 // 判斷某個地點是否已在行程中
-const isLocationInSchedule = (locationId: string) => {
+const isLocationInSchedule = (id: string) => {
   if (!schedules.value) return false;
   return schedules.value.some((schedule) => {
-    if (schedule.location_id === locationId) {
+    if (schedule.location_id === id) {
       return true;
     }
     return false;
   });
 };
 
-// 刪除行程 mutation
-const {
-  mutate: removeSchedule,
-  isPending: isRemoving,
-  variables: removingScheduleId,
-} = useRemoveSchedule();
+const removeSchedule = useRemoveSchedule();
 
 // 判斷某個行程是否正在刪除中
 const isRemovingSchedule = (id: string) => {
-  if (isRemoving.value && removingScheduleId.value === id) {
+  if (removeSchedule.isPending.value && removeSchedule.variables.value === id) {
     return true;
   }
   return false;
@@ -141,19 +132,25 @@ watch(
             <img src="/plus.svg" alt="plus" />
             新增地點
           </button>
-
         </div>
 
         <div
-          class="w-full p-3 bg-white/10 rounded-2xl outline-1 outline-white/20 focus-within:outline-white/50 flex justify-start items-center gap-2"
+          class="w-full p-3 bg-white/10 rounded-2xl outline-1 outline-white/20 focus-within:outline-white/50 flex justify-start items-center gap-2 relative"
         >
           <img src="/search.svg" alt="search" />
           <input
             v-model="searchKeyword"
             type="text"
             placeholder="搜尋地點..."
-            class="w-full bg-transparent text-white text-lg font-normal font-['Noto_Sans_TC'] placeholder:text-white/50 outline-none"
+            class="w-full bg-transparent text-white text-lg font-normal font-['Noto_Sans_TC'] placeholder:text-white/50 outline-none pr-8"
           />
+          <button
+            v-if="searchKeyword"
+            class="absolute right-3 w-5 h-5 flex justify-center items-center cursor-pointer hover:opacity-70"
+            @click="searchKeyword = ''"
+          >
+            <img src="/cross2.svg" alt="clear" class="w-4 h-4" />
+          </button>
         </div>
 
         <div class="w-full flex flex-col justify-start items-center gap-3">
@@ -171,13 +168,13 @@ watch(
                 class="w-full flex flex-col justify-center items-center gap-1"
               >
                 <div
-                  class="w-full text-white text-lg font-medium font-['Noto_Sans_TC'] leading-7 wrap-break-word"
+                  class="w-full text-white text-lg font-medium font-['Noto_Sans_TC'] leading-7 max-w-full break-all"
                 >
                   {{ location.name }}
                 </div>
 
                 <div
-                  class="w-full text-white/70 text-sm font-normal font-['Noto_Sans_TC'] leading-5 wrap-break-word"
+                  class="w-full text-white/70 text-sm font-normal font-['Noto_Sans_TC'] leading-5 max-w-full break-all"
                 >
                   {{ location.address }}
                 </div>
@@ -190,7 +187,7 @@ watch(
                     isLocationInSchedule(location.id)
                   "
                   class="w-15 h-9 px-4 py-2 bg-white/10 rounded-2xl flex justify-center items-center cursor-pointer hover:bg-white/20 disabled:opacity-50 text-center text-white text-sm font-medium font-['Noto_Sans_TC'] leading-5"
-                  @click="addToSchedule(location.id)"
+                  @click="addSchedule.mutate(location.id)"
                 >
                   <Icon
                     v-if="isAddingLocation(location.id)"
@@ -215,7 +212,6 @@ watch(
             </div>
           </div>
         </div>
-
       </div>
 
       <!-- rightSection -->
@@ -255,18 +251,18 @@ watch(
 
             <div class="w-full flex flex-col justify-center items-center gap-3">
               <div
-                class="w-full text-white text-lg font-medium font-['Noto_Sans_TC'] leading-7 wrap-break-word"
+                class="w-full text-white text-lg font-medium font-['Noto_Sans_TC'] leading-7 max-w-full break-all"
               >
                 {{ schedule.name }}
               </div>
 
               <div
-                class="w-full text-white/70 text-sm font-normal font-['Noto_Sans_TC'] leading-5 wrap-break-word"
+                class="w-full text-white/70 text-sm font-normal font-['Noto_Sans_TC'] leading-5 max-w-full break-all"
               >
                 {{ schedule.address }}
               </div>
               <button
-                class="w-full text-left text-sky-200 text-sm font-medium font-['Noto_Sans_TC'] leading-5 cursor-pointer hover:text-sky-100"
+                class="w-full text-left text-sky-200 text-sm font-medium font-['Noto_Sans_TC'] leading-5 cursor-pointer hover:text-sky-100 max-w-full break-all"
                 @click="editingScheduleNoteDialog = schedule"
               >
                 {{ schedule.note ? schedule.note : "📝 新增備註..." }}
@@ -284,7 +280,7 @@ watch(
               <button
                 :disabled="isRemovingSchedule(schedule.id)"
                 class="w-9 h-9 px-2 bg-white/10 rounded-2xl flex flex-col justify-center items-center cursor-pointer hover:bg-white/20 disabled:opacity-50"
-                @click="removeSchedule(schedule.id)"
+                @click="removeSchedule.mutate(schedule.id)"
               >
                 <Icon
                   v-if="isRemovingSchedule(schedule.id)"
