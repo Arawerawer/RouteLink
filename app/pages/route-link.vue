@@ -115,7 +115,7 @@ watch(
     <div class="w-full h-full flex justify-center items-center gap-4">
       <!-- leftSection -->
       <div
-        class="w-full h-full p-6 bg-black/10 rounded-[20px] shadow-lg outline-1 outline-offset-1 outline-white/20 flex-col justify-start items-center gap-4 overflow-auto lg:flex"
+        class="w-full h-full p-6 bg-black/10 rounded-[20px] shadow-lg outline-1 outline-offset-1 outline-white/20 flex-col justify-start items-center gap-4 lg:flex"
         :class="activeSection === 'location' ? 'flex' : 'hidden'"
       >
         <div class="w-full flex justify-between items-center">
@@ -153,7 +153,9 @@ watch(
           </button>
         </div>
 
-        <div class="w-full flex flex-col justify-start items-center gap-3">
+        <div
+          class="w-full flex flex-col justify-start items-center gap-3 overflow-auto custom-scrollbar"
+        >
           <div
             v-for="location in filteredLocations"
             :key="location.id"
@@ -216,7 +218,7 @@ watch(
 
       <!-- rightSection -->
       <div
-        class="w-full h-full p-6 bg-black/10 rounded-[20px] shadow-lg outline-1 outline-offset-1 outline-white/20 flex-col justify-start items-center gap-4 overflow-auto lg:flex"
+        class="w-full h-full p-6 bg-black/10 rounded-[20px] shadow-lg outline-1 outline-offset-1 outline-white/20 flex-col justify-start items-center gap-4 lg:flex"
         :class="activeSection === 'schedule' ? 'flex' : 'hidden'"
       >
         <!-- 今日行程 -->
@@ -226,7 +228,9 @@ watch(
           今日行程
         </div>
         <!-- 行程卡片 -->
-        <div class="w-full flex flex-col justify-start items-center gap-3">
+        <div
+          class="w-full flex flex-col justify-start items-center gap-3 overflow-auto custom-scrollbar"
+        >
           <div
             v-for="schedule in schedules"
             :key="schedule.id"
@@ -352,12 +356,34 @@ watch(
 </template>
 
 <style scoped>
-/* 隱藏滾動條 */
-.overflow-auto {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
-}
-.overflow-auto::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+/* 自訂滾動條樣式 */
+.custom-scrollbar {
+  /* 讓scrollbar靠右 */
+  margin-right: -10px;
+  padding-right: 10px;
+  /* ===== Chrome / Edge / Safari ===== */
+
+  /* 整個滾動條區域 */
+  &::-webkit-scrollbar {
+    width: 6px; /* 垂直滾動條的寬度 */
+    /* height: 10px; 水平滾動條的高度 */
+  }
+
+  /* 軌道（滑塊滑動的背景區域） */
+  &::-webkit-scrollbar-track {
+    background: transparent; /* 軌道背景色 */
+    border-radius: 10px; /* 軌道圓角 */
+  }
+
+  /* 滑塊（可以拖動的那個東西） */
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3); /* 滑塊顏色 - 半透明白 */
+    border-radius: 10px; /* 滑塊圓角 */
+  }
+
+  /* 滑鼠移到滑塊上時 */
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5); /* hover 時變亮 */
+  }
 }
 </style>
