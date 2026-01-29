@@ -15,8 +15,16 @@ export const useAuthStore = defineStore("auth", () => {
   async function logout() {
     loading.value = true;
     try {
-      await client.auth.signOut();
+      const { error } = await client.auth.signOut({ scope: "local" });
+
+      if (error) {
+        throw error;
+      }
+
       navigateTo("/");
+    } catch (error) {
+      alert("登出失敗");
+      console.error("登出失敗:", error);
     } finally {
       loading.value = false;
     }

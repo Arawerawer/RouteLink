@@ -49,7 +49,7 @@ async function signUp() {
 
     navigateTo("/login");
   } catch (error) {
-    // errorMsg.value = (error as Error).message;
+    errorMsg.value = "註冊失敗";
     console.error(error);
   } finally {
     loading.value = false;
