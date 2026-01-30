@@ -89,13 +89,13 @@ watch(
   [schedules, isToggling],
   async ([newSchedules, toggling]) => {
     if (!newSchedules || newSchedules.length === 0) return;
-    // 如果正在更新中，不執行刪除（避免樂觀更新導致的 race condition）
+    // 等 mutation 完成後再執行刪除
     if (toggling) return;
     const allCompleted = newSchedules.every((schedule) => schedule.completed);
     if (allCompleted) {
-      for (const schedule of newSchedules) {
-        await axios.delete(`/api/schedules/${schedule.id}`);
-      }
+      await Promise.all(
+        newSchedules.map((schedule) => axios.delete(`/api/schedules/${schedule.id}`)),
+      );
       queryClient.invalidateQueries({ queryKey: ["schedules"] });
     }
   },
