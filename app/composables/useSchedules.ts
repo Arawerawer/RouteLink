@@ -91,15 +91,23 @@ export function useToggleCompleted() {
 
       return { previous };
     },
-    // 失敗
+    // 成功：用 server 回傳的資料更新 cache
+    onSuccess: (data, schedule) => {
+      queryClient.setQueryData<Schedule[]>(["schedules"], (old) => {
+        if (!old) return old;
+
+        return old.map((item) => {
+          if (item.id === schedule.id) {
+            return { ...item, ...data };
+          }
+          return item;
+        });
+      });
+    },
+    // 失敗：還原樂觀更新
     onError: (_error, _schedule, context) => {
-      // 失敗就還原
       queryClient.setQueryData(["schedules"], context?.previous);
       alert("更新失敗");
-    },
-    // 成功
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["schedules"] });
     },
   });
 }
