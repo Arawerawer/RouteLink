@@ -71,12 +71,35 @@ export function useToggleCompleted() {
       });
       return res.data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["schedules"] });
+
+    // 樂觀更新
+    onMutate: async (schedule) => {
+      await queryClient.cancelQueries({ queryKey: ["schedules"] });
+      const previous = queryClient.getQueryData<Schedule[]>(["schedules"]);
+
+      // 立刻更新 UI
+      queryClient.setQueryData<Schedule[]>(["schedules"], (old) => {
+        if (!old) return old;
+
+        return old.map((item) => {
+          if (item.id === schedule.id) {
+            return { ...item, completed: schedule.completed };
+          }
+          return item;
+        });
+      });
+
+      return { previous };
     },
-    onError: (error: any) => {
+    // 失敗
+    onError: (_error, _schedule, context) => {
+      // 失敗就還原
+      queryClient.setQueryData(["schedules"], context?.previous);
       alert("更新失敗");
-      console.error("更新失敗:", error);
+    },
+    // 成功
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["schedules"] });
     },
   });
 }
