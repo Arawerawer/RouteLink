@@ -55,7 +55,7 @@ const isRemovingSchedule = (id: string) => {
 };
 
 // 更新行程完成狀態 mutation
-const { mutate: toggleCompleted } = useToggleCompleted();
+const { mutate: toggleCompleted, isPending: isToggling } = useToggleCompleted();
 
 // 切換行程完成狀態
 const handleToggleCompleted = (schedule: Schedule) => {
@@ -86,9 +86,11 @@ const openGoogleMap = (address: string) => {
 
 // 監聽 schedules，當全部完成時刪除所有行程
 watch(
-  schedules,
-  async (newSchedules) => {
+  [schedules, isToggling],
+  async ([newSchedules, toggling]) => {
     if (!newSchedules || newSchedules.length === 0) return;
+    // 如果正在更新中，不執行刪除（避免樂觀更新導致的 race condition）
+    if (toggling) return;
     const allCompleted = newSchedules.every((schedule) => schedule.completed);
     if (allCompleted) {
       for (const schedule of newSchedules) {
