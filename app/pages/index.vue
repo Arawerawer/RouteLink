@@ -6,7 +6,7 @@ definePageMeta({
 
 <template>
   <div
-    class="w-full min-h-screen flex flex-col justify-center lg:justify-end items-center px-12 pt-30 pb-25 lg:pt-25 lg:pb-3 2xl:py-25"
+    class="w-full min-h-screen flex flex-col justify-center lg:justify-end items-center px-12 pt-30 pb-25 lg:pt-60 lg:pb-3 2xl:pb-25"
   >
     <div class="w-full flex flex-col justify-center items-center gap-16">
       <div
